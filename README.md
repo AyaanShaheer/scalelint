@@ -1,4 +1,5 @@
-# ⚡ ScaleLint
+# <img width="1536" height="1024" alt="ScaleLint_ Cloud-Ready Performance Scanning" src="https://github.com/user-attachments/assets/b16238af-a272-4c9e-a545-af760599dd54" />
+ ScaleLint
 
 <div align="center">
 
@@ -21,9 +22,9 @@ ScaleLint analyzes application code, database schemas, and Kubernetes autoscalin
 
 ## 🚨 The Problem
 
-Your application works perfectly with 100 users.
+Your application works perfectly with 1000 users.
 
-But what happens when 10,000 users arrive overnight?
+But what happens when 100,000 users arrive overnight?
 
 A single unbounded database query, an inefficient ORM call inside a loop, or an improperly configured Kubernetes autoscaler can turn a successful deployment into a production outage.
 
