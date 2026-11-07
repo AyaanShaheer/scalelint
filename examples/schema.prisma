@@ -1,0 +1,7 @@
+model Order {
+  id            String   @id @default(uuid())
+  customerEmail String   // ❌ Missing @index!
+  status        String
+
+  @@index([status])
+}

@@ -1,0 +1,9 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: order-service-scaler
+spec:
+  scaleTargetRef:
+    name: order-service
+  minReplicaCount: 2
+  maxReplicaCount: 80

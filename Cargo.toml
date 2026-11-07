@@ -1,0 +1,18 @@
+[package]
+name = "scalelint"
+version = "0.1.0"
+edition = "2021"
+description = "Cloud-Native Static Scalability Scanner for CI/CD"
+license = "Apache-2.0"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+ignore = "0.4"
+tree-sitter = "0.22"
+tree-sitter-typescript = "0.21"
+colored = "2.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+regex = "1.10"
+anyhow = "1.0"

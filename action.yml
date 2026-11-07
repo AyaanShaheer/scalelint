@@ -1,0 +1,40 @@
+name: 'ScaleLint - Cloud-Native Scalability Scanner'
+description: 'Scans application AST, DB schemas, and Kubernetes/KEDA manifests for overnight scaling bottlenecks'
+author: 'AS Labs'
+branding:
+  icon: 'trending-up'
+  color: 'red'
+
+inputs:
+  path:
+    description: 'Directory or file path to scan'
+    required: false
+    default: '.'
+  format:
+    description: 'Output format (text, json, sarif)'
+    required: false
+    default: 'text'
+  sarif-file:
+    description: 'File path to write SARIF output when format is sarif'
+    required: false
+    default: 'scalelint.sarif'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Rust Toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Build ScaleLint Binary
+      shell: bash
+      run: cargo build --release --manifest-path ${{ github.action_path }}/Cargo.toml
+
+    - name: Run ScaleLint Scan
+      shell: bash
+      run: |
+        if [ "${{ inputs.format }}" = "sarif" ]; then
+          ${{ github.action_path }}/target/release/scalelint "${{ inputs.path }}" --format sarif > "${{ inputs.sarif-file }}"
+          cat "${{ inputs.sarif-file }}"
+        else
+          ${{ github.action_path }}/target/release/scalelint "${{ inputs.path }}" --format "${{ inputs.format }}"
+        fi
