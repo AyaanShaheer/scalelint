@@ -1,5 +1,4 @@
 # <img width="1536" height="1024" alt="ScaleLint_ Cloud-Ready Performance Scanning" src="https://github.com/user-attachments/assets/b16238af-a272-4c9e-a545-af760599dd54" />
- ScaleLint
 
 <div align="center">
 
