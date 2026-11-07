@@ -26,6 +26,10 @@ struct Cli {
     /// Path to configuration file
     #[arg(long, default_value = "scalelint.yaml")]
     config: PathBuf,
+
+    /// Exit with code 0 even if scalability issues are found (useful for audit-only mode)
+    #[arg(long, default_value_t = false)]
+    no_fail: bool,
 }
 
 #[derive(Deserialize, Debug)]
@@ -129,7 +133,7 @@ fn main() -> Result<()> {
         _ => print_human_readable(&findings),
     }
 
-    if !findings.is_empty() && cli.format != "sarif" {
+    if !findings.is_empty() && !cli.no_fail {
         std::process::exit(1);
     }
 

@@ -26,10 +26,19 @@ jobs:
       - name: Build ScaleLint Release Binary
         run: cargo build --release
 
-      - name: Run ScaleLint Self-Scan (SARIF)
-        run: ./target/release/scalelint examples/ --format sarif > scalelint.sarif
+      - name: Verify ScaleLint Exits 1 on SARIF Findings
+        run: |
+          set +e
+          ./target/release/scalelint examples/ --format sarif > scalelint.sarif
+          EXIT_CODE=$?
+          set -e
+          if [ $EXIT_CODE -ne 1 ]; then
+            echo "Expected exit code 1 when scalability issues exist, got $EXIT_CODE"
+            exit 1
+          fi
 
       - name: Upload SARIF to GitHub Security Tab
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: scalelint.sarif

@@ -1,6 +1,6 @@
 name: 'ScaleLint - Cloud-Native Scalability Scanner'
 description: 'Scans application AST, DB schemas, and Kubernetes/KEDA manifests for overnight scaling bottlenecks'
-author: 'AS Labs'
+author: 'Ayaan Labs'
 branding:
   icon: 'trending-up'
   color: 'red'
@@ -18,6 +18,10 @@ inputs:
     description: 'File path to write SARIF output when format is sarif'
     required: false
     default: 'scalelint.sarif'
+  no-fail:
+    description: 'Do not fail the CI job with exit code 1 when issues are found'
+    required: false
+    default: 'false'
 
 runs:
   using: 'composite'
@@ -32,9 +36,18 @@ runs:
     - name: Run ScaleLint Scan
       shell: bash
       run: |
+        EXTRA_FLAGS=""
+        if [ "${{ inputs.no-fail }}" = "true" ]; then
+          EXTRA_FLAGS="--no-fail"
+        fi
+
         if [ "${{ inputs.format }}" = "sarif" ]; then
-          ${{ github.action_path }}/target/release/scalelint "${{ inputs.path }}" --format sarif > "${{ inputs.sarif-file }}"
+          set +e
+          ${{ github.action_path }}/target/release/scalelint "${{ inputs.path }}" --format sarif $EXTRA_FLAGS > "${{ inputs.sarif-file }}"
+          EXIT_CODE=$?
+          set -e
           cat "${{ inputs.sarif-file }}"
+          exit $EXIT_CODE
         else
-          ${{ github.action_path }}/target/release/scalelint "${{ inputs.path }}" --format "${{ inputs.format }}"
+          ${{ github.action_path }}/target/release/scalelint "${{ inputs.path }}" --format "${{ inputs.format }}" $EXTRA_FLAGS
         fi
